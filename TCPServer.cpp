@@ -20,6 +20,13 @@ int main(int argc, char* argv[])
     listen_sock = socket(AF_INET, SOCK_STREAM, 0);
     if (listen_sock == INVALID_SOCKET) err_quit("socket()");
 
+    // SO_REUSEADDR 옵션 설정
+    int optval = 1;
+    retval = setsockopt(listen_sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&optval, sizeof(optval));
+    if (retval == SOCKET_ERROR) {
+        err_quit("setsockopt()");
+    }
+
     // bind()
     struct sockaddr_in serveraddr;
     memset(&serveraddr, 0, sizeof(serveraddr));
